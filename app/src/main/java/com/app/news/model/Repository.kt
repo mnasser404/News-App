@@ -1,5 +1,6 @@
 package com.app.news.model
 
+import com.app.news.model.AppDatabase.Companion.getDataBaseInstance
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.app.news.App.Companion.getContext
@@ -7,7 +8,6 @@ import com.app.news.model.entities.RemoteResponse.Article
 import com.app.news.model.remote.ServiceGenerator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import nasser.com.athletes.data.cache.AppDatabase.Companion.getDataBaseInstance
 
 class Repository {
 
@@ -17,13 +17,13 @@ class Repository {
             Schedulers.io()
         ).map<List<Article>>({ (articles) ->
             getDataBaseInstance(getContext())
-                .listAtheletsDao().delete()
+                .listNewsDao().delete()
             for (article in articles) {
                 if (article.urlToImage == null) {
                     article.urlToImage = ""
                 }
                 getDataBaseInstance(getContext())
-                    .listAtheletsDao().insert(article)
+                    .listNewsDao().insert(article)
             }
             articles
         })
@@ -33,6 +33,6 @@ class Repository {
 
 
     fun getDataFromCache(): LiveData<List<Article>> {
-        return getDataBaseInstance(getContext()).listAtheletsDao().getAll()
+        return getDataBaseInstance(getContext()).listNewsDao().getAll()
     }
 }
