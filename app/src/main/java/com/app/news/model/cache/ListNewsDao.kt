@@ -1,4 +1,4 @@
-package nasser.com.athletes.data.cache
+package com.app.news.model
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -1,4 +1,4 @@
-package nasser.com.athletes.data.cache
+package com.app.news.model
 
 import android.content.Context
 import androidx.room.Database
@@ -11,7 +11,7 @@ import com.app.news.model.entities.RemoteResponse
 abstract class AppDatabase : RoomDatabase() {
 
 
-    abstract fun listAtheletsDao(): ListNewsDao
+    abstract fun listNewsDao(): ListNewsDao
 
 
     companion object {
