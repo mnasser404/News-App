@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
         newsList = mainList
         newsList.layoutManager = LinearLayoutManager(this)
-        initializeViewModel()
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        observeLiveData()
     }
 
     private fun setupToolbar(){
@@ -41,12 +42,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun initializeViewModel() {
+    private fun observeLiveData() {
         val observer = Observer<List<RemoteResponse.Article>> {
             newsAdapter = NewsAdapter(this, it)
             newsList.adapter = newsAdapter
         }
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         mainViewModel.loadViewData().observe(this, observer)
     }
 
