@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupToolbar()
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         newsList = mainList
         newsList.layoutManager = LinearLayoutManager(this)
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         observeLiveData()
     }
 
