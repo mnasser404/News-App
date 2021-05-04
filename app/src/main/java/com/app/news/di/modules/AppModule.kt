@@ -1,6 +1,8 @@
 package com.app.news.di.modules
 
 import android.content.Context
+import androidx.room.Room
+import com.app.news.model.AppDatabase
 import com.app.news.model.remote.NetworkConstants
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -52,6 +54,11 @@ class AppModule(private var context: Context) {
             .addCallAdapterFactory(getRxJava2CallAdapterFactory())
             .addConverterFactory(getGsonConverterFactory())
             .build()
+    }
+
+    @Provides
+    fun getDataBaseInstance(context: Context): AppDatabase{
+        return Room.databaseBuilder(context, AppDatabase::class.java, "news-db").build()
     }
 
 
