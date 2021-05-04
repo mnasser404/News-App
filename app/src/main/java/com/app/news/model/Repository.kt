@@ -1,23 +1,31 @@
 package com.app.news.model
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
 import com.app.news.App
-import com.app.news.App.Companion.getContext
 import com.app.news.Utils
 import com.app.news.model.AppDatabase.Companion.getDataBaseInstance
 import com.app.news.model.entities.RemoteResponse.Article
 import com.app.news.model.remote.ServiceGenerator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 class Repository {
 
     private lateinit var articles: LiveData<List<Article>>
+    @Inject
+    lateinit var context : Context
+
+    init {
+        App.getAppComponent().inject(this)
+    }
+
 
 
     fun getNewsData(): LiveData<List<Article>> {
-        if (Utils.isNetworkAvailable(App.getContext())) {
+        if (Utils.isNetworkAvailable(context)) {
             articles = getDataFromRemote()
         } else {
             articles = getDataFromCache()
@@ -30,13 +38,13 @@ class Repository {
         val response = newsService.callNewsApiRequest().subscribeOn(
             Schedulers.io()
         ).map<List<Article>> { (articles) ->
-            getDataBaseInstance(getContext())
+            getDataBaseInstance(context)
                 .listNewsDao().delete()
             for (article in articles) {
                 if (article.urlToImage == null) {
                     article.urlToImage = ""
                 }
-                getDataBaseInstance(getContext())
+                getDataBaseInstance(context)
                     .listNewsDao().insert(article)
             }
             articles
@@ -47,6 +55,6 @@ class Repository {
 
 
     private fun getDataFromCache(): LiveData<List<Article>> {
-        return getDataBaseInstance(getContext()).listNewsDao().getAll()
+        return getDataBaseInstance(context).listNewsDao().getAll()
     }
 }
