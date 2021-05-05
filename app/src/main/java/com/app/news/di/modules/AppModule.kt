@@ -1,9 +1,12 @@
 package com.app.news.di.modules
 
+import android.app.Service
 import android.content.Context
 import androidx.room.Room
 import com.app.news.model.AppDatabase
+import com.app.news.model.Repository
 import com.app.news.model.remote.NetworkConstants
+import com.app.news.model.remote.ServiceGenerator
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import dagger.Module
@@ -12,6 +15,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
 @Module
 class AppModule(private var context: Context) {
@@ -59,6 +63,16 @@ class AppModule(private var context: Context) {
     @Provides
     fun getDataBaseInstance(context: Context): AppDatabase{
         return Room.databaseBuilder(context, AppDatabase::class.java, "news-db").build()
+    }
+
+    @Provides
+    fun getRepository() : Repository{
+        return Repository()
+    }
+
+    @Provides
+    fun getServiceGenerator() : ServiceGenerator{
+        return ServiceGenerator()
     }
 
 

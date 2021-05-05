@@ -17,9 +17,10 @@ class Repository {
 
     @Inject
     lateinit var context: Context
-
     @Inject
     lateinit var database: AppDatabase
+    @Inject
+    lateinit var newsService: ServiceGenerator
 
     init {
         App.getAppComponent().inject(this)
@@ -36,7 +37,6 @@ class Repository {
     }
 
     private fun getDataFromRemote(): LiveData<List<Article>> {
-        val newsService = ServiceGenerator()
         val response = newsService.callNewsApiRequest().subscribeOn(
             Schedulers.io()
         ).map<List<Article>> { (articles) ->
